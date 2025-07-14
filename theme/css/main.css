@@ -96,7 +96,13 @@ address {
 }
 
 code {
-    font-family: 'Pixel Code';
+    font-family: 'Pixel Code', 'fang zhou';
     font-size: 1em;
     color: deeppink;
+}
+
+.highlight code {
+    font-family: 'Pixel Code', 'fang zhou';
+    font-size: 1em;
+    color: azure;
 }
