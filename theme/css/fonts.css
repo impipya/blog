@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Pixel Code';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/pixel_code/PixelCode.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Fang Zhou';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/fang_zhou/ark-pixel-12px-monospaced-zh_cn.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "Yanone Kaffeesatz";
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/YK/YanoneKaffeesatz-Regular.woff2') format('woff2');
+}

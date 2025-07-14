@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+              <title>impipya - 配置代理 终级 中级指南</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
+
+        <meta name="tags" content="Docker"/>
+        <meta name="tags" content="publishing"/>
+  </head>
+
+  <body>
+      <header>
+    <nav><ul>
+        <li id="site"><a href="/">impipya</a></li>
+                <li><a href="/category/docker.html"  aria-current="page" >Docker</a></li>
+    </ul></nav>
+      </header>
+      <main>
+    <article>
+
+        <h1>Docker 配置代理 <del>终级</del> 中级指南</h1>
+<p><img alt="real docker" class="leader_pic" src="https://images-1364006926.cos.ap-shanghai.myqcloud.com/website/real%20docker.jpg"></p>
+<h2>🐥发生了什么，怎么办？</h2>
+<p>满心欢喜，在bare metal或VPS上安装你喜爱的distribution后，接着想使用Docker部署一些服务。为了测试拉取image功能是否可用，于是你输入了如下指令[ref]你真的输入了如下指令！[/ref]：</p>
+<div class="highlight"><pre><span></span><code>$ sudo docker pull hello-world
+</code></pre></div>
+<p>在没有特殊配置的情况下，且本地没有之前拉取过镜像的缓存，在等待了几秒钟后，Dockers一般会返回给你以下信息：</p>
+<div class="admonition warning">
+<p class="admonition-title">等等！这是一个测试！</p>
+<p>不用关心这里的内容。</p>
+<!-- [Our Menu]({static}/pdfs/menu.pdf) -->
+<!-- [Our Menu]({author}impipya) -->
+</div>
+<div class="highlight"><pre><span></span><code>Using default tag: latest
+Error response from daemon: Get &quot;https://registry-1.docker.io/v2/&quot;: context deadline exceeded
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 这里添加了一个python代码块，这是从pelican拷贝过来的源码</span>
+
+<span class="k">class</span> <span class="nc">SourceFileGenerator</span><span class="p">(</span><span class="n">Generator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">generate_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_extension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">[</span><span class="s2">&quot;OUTPUT_SOURCES_EXTENSION&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_create_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">output_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">save_as</span><span class="p">)</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="n">output_path</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_extension</span><span class="p">)</span>
+        <span class="n">copy</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">source_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">generate_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating source files...&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;articles&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s2">&quot;pages&quot;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_source</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">obj_trans</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">translations</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_source</span><span class="p">(</span><span class="n">obj_trans</span><span class="p">)</span>
+</code></pre></div>
+<p>经查询，<code>context deadline exceeded</code>是Go语言中HTTP请求超时发生的错误，而Docker又是Go语言写的，所以这显然代表Docker从official registry的hello-world repository拉取hello-world镜像超时了……而这时又尝试了其它的镜像，也都是这个情况。</p>
+<p>造成该现象的原因是，境内对docker默认所采用的（同时也是最大的）registry——Docker Hub进行了屏蔽。此时，如果想要拉取到镜像，有两种方式可以采用：</p>
+<ul>
+<li>
+<p>采用境内由个人或组织搭建维护的registry mirror进行image拉取。</p>
+</li>
+<li>
+<p>为机器和Docker配置proxy。</p>
+</li>
+</ul>
+<h2>1️⃣方式一：Registry Mirror</h2>
+<p>找到可用的registry mirror地址（keyword：docker加速镜像、docker hub mirror），并遵循<a href="https://docs.docker.com/docker-hub/image-library/mirror/#configure-the-docker-daemon">Docker DOC: Configure the Docker daemon</a>中的步骤进行配置。在此对文档中的内容进行简述，并加入俺总结的小Tips。</p>
+<p>可以通过两种方式对Dockers Daemon进行配置，分别是：</p>
+<ul>
+<li>在使用<code>dockerd</code>指令启动Docker daemon时，通过<code>--registry-mirror</code>选项传入mirror地址进行配置。</li>
+<li>修改Docker daemon的配置文件<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file"><code>/etc/docker/daemon.json</code></a>(没有则创建)，往其中<strong>加入</strong><code>registry-mirrors</code>键值对。值是一个数组，其中数组中的值是registry mirror的地址字符串。如下所示：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;registry-mirrors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;https://&lt;my-docker-mirror-host&gt;&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>配置并保存完毕后（任何对<code>daemon.json</code>的更改），都需restart（reload可以吗？见下文）Docker daemon以刷新配置：</p>
+<div class="highlight"><pre><span></span><code>$ sudo systemctl restart docker
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">等等！这是一个测试！</p>
+<p>经过实际检测，对于proxy配置，<code>systemctl reload</code>不足以使改变后的<code>daemon.json</code>配置生效。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">等等！这是一个测试！</p>
+<p>最佳实践：对于<code>daemon.json</code>配置的变更，总是使用<code>systemctl restart</code>来进行重启。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">等等！这是一个测试！</p>
+<p>通常我们可以看到，在配置中往一个数组内填入多个地址的行为，如：
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;registry-mirrors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;https://&lt;my-docker-mirror-host_1&gt;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;https://&lt;my-docker-mirror-host_2&gt;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">&quot;https://&lt;my-docker-mirror-host_3&gt;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="err">...</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>经过（算不上是最全面的）查询，这种方式在<a href="https://docs.docker.com/docker-hub/image-library/mirror/">Mirror</a>和<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file">Daemon configuration file</a>中都没有明确定义。而在man手册的dockerd(8)中，也仅有一段针对<code>--registry-mirror</code>选项的描述：</p>
+<div class="highlight"><pre><span></span><code>--registry-mirror=://
+      Prepend a registry mirror to be used for image pulls. May be specified
+      multiple times.
+</code></pre></div>
+<p>所以姑且把这算做一个undocumented（至少没有显而易见的文档）的用法。但据说Dockers会在前面的mirror地址失效时自动切换至配置中的下一个地址。</p>
+</div>
+<h2>2️⃣方式二：使用 Proxy</h2>
+<p>看起来大多数registry镜像站都不太稳定。在镜像站不可用时，需要经过如下的循环步骤，来重新获得一个可用的服务：</p>
+<div class="highlight"><pre><span></span><code>do {
+    寻找mirror
+    配置mirror
+} while mirror不可用
+配置成功
+</code></pre></div>
+<p>无疑，有时这不太方便。</p>
+<p>由于Docker CLI拉取image时是通过daemon来与Docker Hub registry进行通信完成的，所以为docker daemon配置代理，来直接从Docker Hub中拉取image，是最为一劳永逸的办法。（确保代理服务器持续可用。）</p>
+<p><a href="https://docs.docker.com/engine/daemon/proxy/">Daemon proxy configuration | Docker Docs</a>中有对Docker daemon配置proxy的详细步骤，在此进行简述，同时也加入了一些自己总结的小Tips：</p>
+<p>首先，为Docker daemon配置proxy的方式有两种：一是配置<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file"><code>/etc/docker/daemon.json</code></a>文件，二是对systemd unit文件进行配置。</p>
+<h3>📄配置 daemon.json（文档中的推荐做法）</h3>
+<p>如同配置mirror一样，配置可以在启动docker daemon时由<code>dockerd</code>命令选项传入，也可在<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file"><code>/etc/docker/daemon.json</code></a>（没有则创建）中配置，需要在文件中添加的内容如下：</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;proxies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;http-proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://proxy.example.com:3128&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;https-proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://proxy.example.com:3129&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;no-proxy&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;*.test.example.com,.example.org,127.0.0.0/8&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>其中proxy的地址和端口需要更据实际情况自己调整。在文件修改完毕后，通过<code>dockerd --validate</code>检查配置文件，确认配置无误后，使用如下指令重启docker daemon：</p>
+<div class="highlight"><pre><span></span><code>$ sudo systemctl restart docker
+</code></pre></div>
+<p>即可使配置生效。</p>
+<div class="admonition note">
+<p class="admonition-title">等等！这是一个测试！</p>
+<p><code>dockerd --validate</code>无法检测路径和文件名的正确性。如果路径或文件名错误，将导致检测结果总是<code>configuration OK</code>,且显而易见配置不会生效。一定要注意哦！</p>
+</div>
+<h3>📄配置 Systemd Unit文件</h3>
+<p>在<a href="https://docs.docker.com/engine/daemon/proxy/">Daemon proxy configuration | Docker Docs</a>中，对于通过以修改Systemd Unit文件的方式来配置代理，有这样一段说明：</p>
+<blockquote>
+<p>The Docker daemon checks the following environment variables in its start-up environment to configure HTTP or HTTPS proxy behavior:</p>
+<p>译为：docker守护进程通过检查start-up environment中如下environment variables来配置代理的行为：</p>
+<ul>
+<li><code>HTTP_PROXY</code></li>
+<li><code>http_proxy</code></li>
+<li><code>HTTPS_PROXY</code></li>
+<li><code>https_proxy</code></li>
+<li><code>NO_PROXY</code></li>
+<li><code>no_proxy</code></li>
+</ul>
+</blockquote>
+<p>从语境中看，这里指的不是bash shell概念中的环境变量，而是systemd环境中的一个概念。经过实测，也证明了bash shell中配置的<code>*_PROXY</code>、<code>*_proxy</code>环境变量确实不会对docker pull image的行为产生影响。所以，根据下文对docker daemon进行配置，才可以使docker CLI使用代理来pull image。</p>
+<p>关于该配置详细的语法说明，可以查看<a href="https://docs.docker.com/engine/daemon/proxy/">Daemon proxy configuration | Docker Docs</a>，这里对需要进行的配置进行简述。</p>
+<p>首先在<code>/etc/systemd/system/docker.service.d/http-proxy.conf</code>文件中添加如下配置：</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Service]</span>
+<span class="na">Environment</span><span class="o">=</span><span class="s">&quot;HTTP_PROXY=http://proxy.example.com:3128&quot;</span>
+<span class="na">Environment</span><span class="o">=</span><span class="s">&quot;HTTPS_PROXY=https://proxy.example.com:3129&quot;</span>
+<span class="na">Environment</span><span class="o">=</span><span class="s">&quot;NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp&quot;</span>
+</code></pre></div>
+<p>其中proxy的地址和端口需要更据实际情况自己调整。</p>
+<p>输入以下指令来使配置生效：</p>
+<div class="highlight"><pre><span></span><code>$ sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart docker
+</code></pre></div>
+<p>通过以下指令来检测配置的有效性：</p>
+<div class="highlight"><pre><span></span><code>$ sudo systemctl show --property=Environment docker
+</code></pre></div>
+<p>如果配置正确，会有类似如下输出：</p>
+<div class="highlight"><pre><span></span><code>Environment=HTTP_PROXY=http://proxy.example.com:3128 HTTPS_PROXY=https://proxy.example.com:3129 NO_PROXY=localhost,127.0.0.1,docker-registry.example.com,.corp
+</code></pre></div>
+<h3>✅配置完成之后</h3>
+<p>此时应该就可以通过<code>docker pull</code>指令来进行image的拉取：</p>
+<div class="highlight"><pre><span></span><code>$ sudo docker pull hello-world
+</code></pre></div>
+<h2>🚩Beyond</h2>
+<p>上文的配置，只会在通过命令行拉取镜像时生效，而不会影响Dockerfile运行时和容器内部网络。下一步是，在Dockerfile运行时和容器内部使用代理。</p>
+<p>[待更新]</p>
+<h2>Other</h2>
+<ul>
+<li>library mirror or registry mirror？应该准确说是registry mirror。</li>
+<li>image和mirror如果不使用英文的化，就只能通过context（语境）分清了。</li>
+</ul>
+
+        <footer>
+            <p>Published:
+                <time datetime="2024-12-03T10:20:00+01:00">Tue 03 December 2024</time>
+            </p>
+
+                <p>Last updated:
+                    <time datetime="2025-06-05T19:30:00+02:00">
+                        Thu 05 June 2025
+                    </time>
+                </p>
+
+                <address>
+                    By                     <a href="/author/impipya.html">impipya</a>
+                </address>
+
+                <p>
+                    Category: <a href="/category/docker.html">Docker</a>
+                </p>
+
+                <p>
+                    Tags:
+                        <a href="/tag/docker.html">Docker</a>
+                        <a href="/tag/publishing.html">publishing</a>
+                </p>
+        </footer>
+    </article>
+      </main>
+      <footer>
+<address>
+    Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+    which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>,
+    theme by <a rel="nofollow" href="">impipya</a>>
+</address>
+      </footer>
+  </body>
+</html>
