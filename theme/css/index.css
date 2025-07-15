@@ -1,0 +1,18 @@
+
+.index_deli {
+    color: azure;
+    font-size: 2rem;
+}
+
+.index_header h1 {
+    margin-top: 0;
+}
+
+.index_header h1 a {
+    color: hotpink;
+    text-decoration: none;
+}
+
+.index_header h1 a:hover {
+    color: yellow;
+}

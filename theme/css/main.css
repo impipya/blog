@@ -1,109 +1,132 @@
 
+/* import area */
 @import url(fonts.css);
 @import url(pymdown.css);
 @import url(pygment.css);
+@import url(index.css);
 
+
+/* ========================================================================== */
+/* global setting */
+/* ========================================================================== */
+body {
+    /* font */
+    font-size: 1.2rem;
+    color: aliceblue;
+    font-family: 'Pixel Code', 'Fusion', 'sans-serif';
+    /* SVG背景 */
+    background-color: #413a4a;
+    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10h10v10H0V10zM10 0h10v10H10V0z' fill='%232b292e' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+a {
+    color: yellowgreen;
+    text-decoration: underline;
+}
+
+/* leader picture 开篇图片 */
+/* -------------------------------------------------------------------------- */
 .leader_pic {
     width: 100%;
     border-radius: 10px;
 }
 
-
-a {
-    color: yellowgreen;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 20px; /* 设置列表项之间的间距 */
-}
-
-nav li a {
-    padding: 0;
-    margin: 0;
-    font-size: 2em;
-    text-decoration: none;
-}
-
-nav li a:hover{
-    font-size: 2em;
-    color: yellow;
-    text-decoration: none;
-
-}
-
-#site a {
-    color: yellow;
-    text-decoration: none;
-    font-size: 2em;
-    margin-right: 2em;
-}
-
+/* navigater */
+/* -------------------------------------------------------------------------- */
 nav {
-    padding: 1em;
-    margin: 1em;
+    color: yellowgreen;
+    font-size: 2em;
+    margin: 1em 1em 2em 1em;
+    padding: 0.5em 1em;
     border: 20px;
     border-radius: 10px;
-    margin-bottom: 2em;
     border-color: rgba(0, 0, 0, 0.5);
     background-color: rgba(0, 0, 0, 0.5);
     font-family: Yanone Kaffeesatz, Monospaced;
 }
 
-body {
-    font-size: 1.2em;
-    color: aliceblue;
-    background-color: #413a4a;
-    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10h10v10H0V10zM10 0h10v10H10V0z' fill='%232b292e' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");;
-    font-family: 'fang zhou', 'sans-serif';
+nav ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 30px;
 }
 
+nav li a {
+    text-decoration: none;
+}
+
+nav li a:hover{
+    color: yellow;
+    text-decoration: none;
+}
+
+/* navigater site  */
+#site_leader a {
+    color: yellow;
+    text-decoration: none;
+}
+
+/* main contents */
+/* -------------------------------------------------------------------------- */
 main {
-    border-radius: 10px;
-    border: 20px;
-    padding: 1em;
-    border-color: rgba(0, 0, 0, 0.5);
     width: 1000px;          /* 固定宽度 */
     margin: 0 auto;        /* 左右自动外边距实现水平居中 */
+    padding: 1em;
+    border: 20px;
+    border-radius: 10px;
+    border-color: rgba(0, 0, 0, 0.5);
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+main a {
+    color: deepskyblue;
+    text-decoration: underline;
+}
+
 /* Headings */
-h1 {font-size: 2em }
-h2 {font-size: 1.571em}	/* 22px */
-h3 {font-size: 1.429em}	/* 20px */
-h4 {font-size: 1.286em}	/* 18px */
-h5 {font-size: 1.143em}	/* 16px */
-h6 {font-size: 1em}		/* 14px */
+/* -------------------------------------------------------------------------- */
+h1 {font-size: 2rem }
+h2 {font-size: 1.5rem}
+h3 {font-size: 1.4rem}
+h4 {font-size: 1.3rem}
+h5 {font-size: 1.15rem}
+h6 {font-size: 1rem}
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
     color: azure;
-    font-weight: 400;
+    font-weight: bold;
     line-height: 1.1;
+    margin-top: 0.5em;
     margin-bottom: .8em;
-    font-family: 'Pixel Code', 'Fang Zhou', arial, serif;
+    font-family: 'Pixel Code', 'Fang Zhou', sans-serif;
+}
+h2, h3, h4, h5, h6 {
+    color: azure;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-top: 2em;
+    margin-bottom: .8em;
+    font-family: 'Pixel Code', 'Fang Zhou', sans-serif;
 }
 
-article header a {
-  color: #ffea00; /* 示例：设置背景色 */
-}
-
+/* address */
+/* -------------------------------------------------------------------------- */
 address {
+    color: yellowgreen;
     margin-top: 1.5em;
     text-align: center;
 }
 
 code {
-    font-family: 'Pixel Code', 'fang zhou';
-    font-size: 1em;
+    font-family: 'Pixel Code', 'fang zhou', monospace;
+    font-size: 1rem;
     color: deeppink;
 }
 
 .highlight code {
-    font-family: 'Pixel Code', 'fang zhou';
-    font-size: 1em;
-    color: azure;
+    font-family: 'Pixel Code', 'fang zhou', monospace;
+    font-size: 1rem;
+    color: inherit;
 }

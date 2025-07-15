@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-              <title>impipya - 配置代理 终级 中级指南</title>
+          <title>impipya - Docker 代理配置 终级 中级指南</title>
       <meta charset="utf-8" />
       <meta name="generator" content="Pelican" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="/theme/css/main.css" />
-
+<link rel="stylesheet" type="text/css" href="/theme/css/main.css" /> <link rel="shortcut icon" href="/theme/icon/diskette.ico" type="image/x-icon" /> 
         <meta name="tags" content="Docker"/>
         <meta name="tags" content="publishing"/>
   </head>
 
   <body>
       <header>
-    <nav><ul>
-        <li id="site"><a href="/">impipya</a></li>
-                <li><a href="/category/docker.html"  aria-current="page" >Docker</a></li>
-    </ul></nav>
+<nav><ul>
+    <li id="site_leader"><a href="/">impipya</a></li>
+    <li><a href="/category/docker.html"  aria-current="page" >Docker</a></li>
+    <li><a href="/category/retro-pc.html" >Retro PC</a></li>
+</ul></nav>
       </header>
       <main>
     <article>
 
-        <h1>Docker 配置代理 <del>终级</del> 中级指南</h1>
+        <h1>Docker 代理配置 <del>终级</del> 中级指南</h1>
 <p><img alt="real docker" class="leader_pic" src="https://images-1364006926.cos.ap-shanghai.myqcloud.com/website/real%20docker.jpg"></p>
 <h2>🐥发生了什么，怎么办？</h2>
 <p>满心欢喜，在bare metal或VPS上安装你喜爱的distribution后，接着想使用Docker部署一些服务。为了测试拉取image功能是否可用，于是你输入了如下指令：</p>
@@ -95,7 +95,7 @@ Error response from daemon: Get &quot;https://registry-1.docker.io/v2/&quot;: co
 <p>由于Docker CLI拉取image时是通过daemon来与Docker Hub registry进行通信完成的，所以为docker daemon配置代理，来直接从Docker Hub中拉取image，是最为一劳永逸的办法。（确保代理服务器持续可用。）</p>
 <p><a href="https://docs.docker.com/engine/daemon/proxy/">Daemon proxy configuration | Docker Docs</a>中有对Docker daemon配置proxy的详细步骤，在此进行简述，同时也加入了一些自己总结的小Tips：</p>
 <p>首先，为Docker daemon配置proxy的方式有两种：一是配置<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file"><code>/etc/docker/daemon.json</code></a>文件，二是对systemd unit文件进行配置。</p>
-<h3>📄配置 daemon.json（文档中的推荐做法）</h3>
+<h3>📄方式二，选择一，配置 daemon.json（文档推荐）</h3>
 <p>如同配置mirror一样，配置可以在启动docker daemon时由<code>dockerd</code>命令选项传入，也可在<a href="https://docs.docker.com/reference/cli/dockerd/#daemon-configuration-file"><code>/etc/docker/daemon.json</code></a>（没有则创建）中配置，需要在文件中添加的内容如下：</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;proxies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -113,7 +113,7 @@ Error response from daemon: Get &quot;https://registry-1.docker.io/v2/&quot;: co
 <p class="admonition-title">Tip!</p>
 <p><code>dockerd --validate</code>无法检测路径和文件名的正确性。如果路径或文件名错误，将导致检测结果总是<code>configuration OK</code>,且显而易见配置不会生效。一定要注意哦！</p>
 </div>
-<h3>📄配置 Systemd Unit文件</h3>
+<h3>📄方式二，选择二，配置 Systemd Unit文件</h3>
 <p>在<a href="https://docs.docker.com/engine/daemon/proxy/">Daemon proxy configuration | Docker Docs</a>中，对于通过以修改Systemd Unit文件的方式来配置代理，有这样一段说明：</p>
 <blockquote>
 <p>The Docker daemon checks the following environment variables in its start-up environment to configure HTTP or HTTPS proxy behavior:</p>
@@ -159,6 +159,7 @@ Error response from daemon: Get &quot;https://registry-1.docker.io/v2/&quot;: co
 </ul>
 
         <footer>
+            <br><br>
             <p>Published:
                 <time datetime="2024-12-03T10:20:00+01:00">Tue 03 December 2024</time>
             </p>
@@ -189,7 +190,7 @@ Error response from daemon: Get &quot;https://registry-1.docker.io/v2/&quot;: co
 <address>
     Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
     which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>,
-    theme by <a rel="nofollow" href="">impipya</a>
+    theme by <a rel="nofollow" href="">impipya</a>. <br><br>    &copy; 2024-2025 <a rel="nofollow" href="">impipya</a> | <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
 </address>
       </footer>
   </body>

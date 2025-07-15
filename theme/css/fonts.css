@@ -18,3 +18,10 @@
     font-weight: 400;
     src: url('../fonts/YK/YanoneKaffeesatz-Regular.woff2') format('woff2');
 }
+
+@font-face {
+    font-family: "Fusion";
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/fusion/fusion-pixel-12px-proportional-zh_hans.ttf.woff2') format('woff2');
+}
